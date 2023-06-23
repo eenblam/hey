@@ -2,6 +2,8 @@ from django.db import models
 
 # Create your models here.
 class Friend(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
     first_name = models.TextField() # required
     last_name = models.TextField(blank=True)
     #TODO timezones?

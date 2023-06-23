@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.views import generic
 
 from .models import Friend
@@ -9,5 +8,11 @@ from .models import Friend
 class FriendsView(LoginRequiredMixin, generic.ListView):
     model = Friend
 
+    def get_queryset(self):
+        return Friend.objects.filter(user=self.request.user)
+
 class FriendView(LoginRequiredMixin, generic.DetailView):
     model = Friend
+
+    def get_object(self):
+        return Friend.objects.get(user=self.request.user, pk=self.kwargs['pk'])
