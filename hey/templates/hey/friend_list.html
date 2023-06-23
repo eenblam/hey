@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Friends{% endblock %}
+
+{% block content %}
+
 {% if object_list %}
 <ul>
     {% for friend in object_list %}
@@ -7,3 +13,5 @@
 {% else %}
 <p>No friends yet. Try adding some!</p>
 {% endif %}
+
+{% endblock %}
