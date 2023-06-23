@@ -1,0 +1,17 @@
+{% if object.last_name %}
+<h1>{{ object.first_name }} {{ object.last_name }}</h1>
+{% else %}
+<h1>{{ object.first_name }}</h1>
+{% endif %}
+
+{% if object.birthday %}
+<p>Birthday: {{ object.birthday }}</p>
+{% else %}
+<p>Birthday: None</p>
+{% endif %}
+
+{% if object.phone %}
+<p>Phone: {{ object.phone }}</p>
+{% else %}
+<p>Phone: None</p>
+{% endif %}
