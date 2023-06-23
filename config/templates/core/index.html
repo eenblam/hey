@@ -3,5 +3,9 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
+<p>hey {{ user.get_username }}</p>
+{% else %}
 <p>hey</p>
+{% endif %}
 {% endblock %}
