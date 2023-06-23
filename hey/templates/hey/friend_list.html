@@ -7,7 +7,21 @@
 {% if object_list %}
 <ul>
     {% for friend in object_list %}
-    <li><a href="{% url 'hey:friend' friend.id %}">{{ friend.first_name }}</a></li>
+    <li>
+        <a href="{% url 'hey:friend' friend.id %}">
+        {{ friend.first_name }}{% if friend.last_name %} {{ friend.last_name }}{% endif %}
+        </a>
+        {% if friend.birthday or friend.phone %}
+        <ul>
+            {% if friend.birthday %}
+            <li>Birthday: {{ friend.birthday }}</li>
+            {% endif %}
+            {% if friend.phone %}
+            <li>Phone: {{ friend.phone }}</li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% else %}
