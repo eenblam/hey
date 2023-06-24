@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load hey_extras %}
+
 {% block title %}Friends{% endblock %}
 
 {% block content %}
@@ -12,9 +14,12 @@
 <ul>
     {% for friend in object_list %}
     <li>
-        <a href="{% url 'hey:friend-detail' friend.id %}">
-        {{ friend.first_name }}{% if friend.last_name %} {{ friend.last_name }}{% endif %}
-        </a>
+        <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend|try_full_name }}</a>
+
+        {% if friend.last_contact %}(last contact: {{ friend.last_contact |style_last_contact }}){% endif %}
+
+        <a href="{% url 'hey:friend-update' friend.id %}" title="Update">✏️</a>
+
         {% if friend.birthday or friend.phone %}
         <ul>
             {% if friend.birthday %}
