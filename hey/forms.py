@@ -8,7 +8,10 @@ class DateInput(forms.DateInput):
 class FriendForm(forms.ModelForm):
     class Meta:
         model = Friend
-        fields = ['first_name', 'last_name', 'birthday', 'phone']
+        fields = ['first_name', 'last_name', 'phone', 'birthday']
         widgets = {
-            'birthday': DateInput()
+            'first_name': forms.TextInput(),
+            'last_name': forms.TextInput(),
+            'birthday': DateInput(),
+            'phone': forms.TextInput()
         }
