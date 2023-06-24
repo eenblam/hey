@@ -16,3 +16,12 @@ class FriendView(LoginRequiredMixin, generic.DetailView):
 
     def get_object(self):
         return Friend.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+
+class FriendCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Friend
+    fields = ['first_name', 'last_name', 'birthday', 'phone']
+
+    def form_valid(self, form):
+        # Link Friend to user
+        form.instance.user = self.request.user
+        return super().form_valid(form)

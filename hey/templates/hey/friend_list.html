@@ -4,11 +4,15 @@
 
 {% block content %}
 
+<h2>Friends</h2>
+
+<p><a href="{% url 'hey:friend-add' %}">Add a friend</a></p>
+
 {% if object_list %}
 <ul>
     {% for friend in object_list %}
     <li>
-        <a href="{% url 'hey:friend' friend.id %}">
+        <a href="{% url 'hey:friend-detail' friend.id %}">
         {{ friend.first_name }}{% if friend.last_name %} {{ friend.last_name }}{% endif %}
         </a>
         {% if friend.birthday or friend.phone %}

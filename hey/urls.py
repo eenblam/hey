@@ -23,5 +23,6 @@ app_name = 'hey'
 
 urlpatterns = [
     path('friends/', views.FriendsView.as_view(), name='friends'),
-    path('friends/<int:pk>/', views.FriendView.as_view(), name='friend'),
+    path('friends/add/', views.FriendCreateView.as_view(), name='friend-add'),
+    path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),
 ]
