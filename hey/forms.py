@@ -8,10 +8,14 @@ class DateInput(forms.DateInput):
 class FriendForm(forms.ModelForm):
     class Meta:
         model = Friend
-        fields = ['first_name', 'last_name', 'phone', 'birthday']
+        # Exclude "user" since we don't want that edited
+        fields = ['first_name', 'last_name',
+                  'phone', 'birthday', 'last_contact']
         widgets = {
+            # We want an `input` instead of a `textarea`
             'first_name': forms.TextInput(),
             'last_name': forms.TextInput(),
             'birthday': DateInput(),
-            'phone': forms.TextInput()
+            'phone': forms.TextInput(),
+            'last_contact': DateInput(),
         }
