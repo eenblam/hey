@@ -22,7 +22,7 @@
 
         {% if friend.birthday or friend.phone %}
         <ul>
-            {% if friend.birthday %}
+            {% if friend.has_recent_birthday %}
             <li>Birthday: {{ friend.birthday }}</li>
             {% endif %}
             {% if friend.phone %}

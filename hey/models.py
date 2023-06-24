@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.db import models
 from django.urls import reverse
 
@@ -27,3 +29,14 @@ class Friend(models.Model):
         if self.last_name != "":
             return f'{self.first_name} {self.last_name}'
         return self.first_name
+
+    def has_recent_birthday(self):
+        if self.birthday is None or self.birthday == "":
+            return False
+
+        today = date.today()
+        m = timedelta(weeks=4)
+        today = today.replace(year=self.birthday.year)
+        if abs(today - self.birthday) < m: 
+            return True
+        return False
