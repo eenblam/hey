@@ -3,12 +3,6 @@ from datetime import datetime
 from django.template.defaultfilters import register
 
 @register.filter
-def try_full_name(friend):
-    if friend.last_name == "":
-        return friend.first_name
-    return f"{friend.first_name} {friend.last_name}"
-
-@register.filter
 def style_last_contact(last_contact):
     if last_contact is None or last_contact == "":
         return ""

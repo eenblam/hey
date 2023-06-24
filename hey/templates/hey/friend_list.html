@@ -14,7 +14,7 @@
 <ul>
     {% for friend in object_list %}
     <li>
-        <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend|try_full_name }}</a>
+        <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend.get_full_name }}</a>
 
         {% if friend.last_contact %}(last contact: {{ friend.last_contact |style_last_contact }}){% endif %}
 

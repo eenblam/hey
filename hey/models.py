@@ -22,3 +22,8 @@ class Friend(models.Model):
     # to redirect after a successful form submission.
     def get_absolute_url(self):
         return reverse('hey:friend-detail', kwargs={'pk': self.pk})
+
+    def get_full_name(self):
+        if self.last_name != "":
+            return f'{self.first_name} {self.last_name}'
+        return self.first_name
