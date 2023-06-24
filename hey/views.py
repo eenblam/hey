@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Friend
@@ -25,3 +26,13 @@ class FriendCreateView(LoginRequiredMixin, generic.CreateView):
         # Link Friend to user
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class FriendUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Friend
+    fields = ['first_name', 'last_name', 'birthday', 'phone']
+
+
+class FriendDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Friend
+    success_url = reverse_lazy("hey:friends")

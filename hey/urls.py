@@ -25,4 +25,6 @@ urlpatterns = [
     path('friends/', views.FriendsView.as_view(), name='friends'),
     path('friends/add/', views.FriendCreateView.as_view(), name='friend-add'),
     path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),
+    path('friends/<int:pk>/delete', views.FriendDeleteView.as_view(), name='friend-delete'),
+    path('friends/<int:pk>/update', views.FriendUpdateView.as_view(), name='friend-update'),
 ]

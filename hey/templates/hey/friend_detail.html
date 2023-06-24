@@ -9,6 +9,11 @@
 <h1>{{ object.first_name }}</h1>
 {% endif %}
 
+<p>
+    <a href="{% url 'hey:friend-update' object.id %}">Update</a> |
+    <a href="{% url 'hey:friend-delete' object.id %}">Delete</a>
+</p>
+
 {% if object.birthday %}
 <p>Birthday: {{ object.birthday }}</p>
 {% else %}
