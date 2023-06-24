@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .forms import FriendForm
 from .models import Friend
 
 # Create your views here.
@@ -20,7 +21,7 @@ class FriendView(LoginRequiredMixin, generic.DetailView):
 
 class FriendCreateView(LoginRequiredMixin, generic.CreateView):
     model = Friend
-    fields = ['first_name', 'last_name', 'birthday', 'phone']
+    form_class = FriendForm
 
     def form_valid(self, form):
         # Link Friend to user
@@ -30,7 +31,7 @@ class FriendCreateView(LoginRequiredMixin, generic.CreateView):
 
 class FriendUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Friend
-    fields = ['first_name', 'last_name', 'birthday', 'phone']
+    form_class = FriendForm
 
 
 class FriendDeleteView(LoginRequiredMixin, generic.DeleteView):
