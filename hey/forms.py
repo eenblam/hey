@@ -19,3 +19,24 @@ class FriendForm(forms.ModelForm):
             'phone': forms.TextInput(),
             'last_contact': DateInput(),
         }
+
+class CheckinsForm(forms.Form):
+    """
+    Form for checking in on friends.
+    This is meant to be a helpful page to view, not just for updates.
+    """
+    def __init__(self, user, *args, **kwargs):
+        # Initialize before touching self.fields
+        super(CheckinsForm, self).__init__(*args, **kwargs)
+
+        self.user = user
+        self.id_list = []
+
+        for friend in Friend.objects.filter(user=self.user):
+            self.id_list.append(friend.id)
+            self.fields['last_contact_%s' % friend.id] = forms.DateField(
+                widget=DateInput(),
+                required=False,
+                label=friend.get_full_name(),
+                initial=friend.last_contact
+            )

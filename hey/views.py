@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-
-from .forms import FriendForm
+from .forms import FriendForm, CheckinsForm
 from .models import Friend
 
 # Create your views here.
@@ -41,9 +42,32 @@ class FriendDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class CheckinsView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "hey/checkins.html"
+    def get(self, request, **kwargs):
+        form = CheckinsForm(user=request.user)
+        return render(request, "hey/checkins.html", {'form': form})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['friends'] = Friend.objects.filter(user=self.request.user).order_by('-last_contact')
-        return context
+    def post(self, request, **kwargs):
+        form = CheckinsForm(data=request.POST, user=request.user)
+        if not form.is_valid():
+            return HttpResponse(status=400)
+
+        friends = []
+        for k,v in form.cleaned_data.items():
+            if not k.startswith('last_contact_'):
+                continue
+            try:
+                friend_id = int(k.lstrip('last_contact_'))
+                friend = Friend.objects.get(pk=friend_id, user=request.user)
+                # Only bulk update on change
+                if friend.last_contact != v:
+                    friend.last_contact = v
+                    friends.append(friend)
+            except ValueError: # friend_id wasn't an int => bad request, abort
+                return HttpResponse(status=400)
+            except Friend.DoesNotExist: # user has no such friend => bad request, abort
+                return HttpResponse(status=400)
+
+        Friend.objects.bulk_update(friends, ['last_contact'])
+
+        print(f'Updated {len(friends)} friends for user {request.user.id} ({request.user})')
+        return HttpResponseRedirect(reverse_lazy("hey:checkins"))
