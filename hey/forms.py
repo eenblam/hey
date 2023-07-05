@@ -35,7 +35,12 @@ class CheckinsForm(forms.Form):
         for friend in Friend.objects.filter(user=self.user):
             self.id_list.append(friend.id)
             self.fields['last_contact_%s' % friend.id] = forms.DateField(
-                widget=DateInput(),
+                widget=DateInput(
+                    attrs={
+                        'data-initial': friend.last_contact,
+                        'onchange': 'if (this.dataset.initial != this.value) { this.parentElement.classList.add("changed"); } else { this.parentElement.classList.remove("changed"); }'
+                        }
+                ),
                 required=False,
                 label=friend.get_full_name(),
                 initial=friend.last_contact

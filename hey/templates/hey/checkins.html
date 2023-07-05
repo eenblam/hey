@@ -2,6 +2,14 @@
 
 {% block title %}Check-ins{% endblock %}
 
+{% block styles %}
+<style>
+p.changed {
+    background-color: rgb(254, 255, 168);
+}
+</style>
+{% endblock %}
+
 {% block content %}
 {% if user.is_authenticated %}
     <h2>Check-ins</h2>
