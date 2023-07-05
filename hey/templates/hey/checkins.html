@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Check-ins{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>Check-ins</h2>
+    <ul>
+    {% for friend in friends %}
+        <li>{{ friend.get_full_name }}: {{ friend.last_contact }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>hey</p>
+{% endif %}
+{% endblock %}
+```

@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic
 
+
 from .forms import FriendForm
 from .models import Friend
 
@@ -37,3 +38,12 @@ class FriendUpdateView(LoginRequiredMixin, generic.UpdateView):
 class FriendDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Friend
     success_url = reverse_lazy("hey:friends")
+
+
+class CheckinsView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "hey/checkins.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['friends'] = Friend.objects.filter(user=self.request.user).order_by('-last_contact')
+        return context

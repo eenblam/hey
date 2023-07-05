@@ -27,4 +27,5 @@ urlpatterns = [
     path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),
     path('friends/<int:pk>/delete', views.FriendDeleteView.as_view(), name='friend-delete'),
     path('friends/<int:pk>/update', views.FriendUpdateView.as_view(), name='friend-update'),
+    path('checkins/', views.CheckinsView.as_view(), name='checkins'),
 ]
