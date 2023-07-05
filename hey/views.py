@@ -51,23 +51,30 @@ class CheckinsView(LoginRequiredMixin, generic.TemplateView):
         if not form.is_valid():
             return HttpResponse(status=400)
 
-        friends = []
-        for k,v in form.cleaned_data.items():
-            if not k.startswith('last_contact_'):
-                continue
+        # Parse form labels into a dict of {friend_id: last_contact}
+        data = [(friend_id.strip('last_contact_'), contact_date)
+                      for friend_id, contact_date in form.cleaned_data.items()
+                      if friend_id.startswith('last_contact_')]
+        try:
+            data = {int(f_id):cd for f_id, cd in data}
+        except ValueError: # friend_id wasn't an int => bad request, abort
+            return HttpResponse(status=400)
+
+        #TODO enforce maximum number of friends updated at once
+
+        changed_friends = []
+        friends = Friend.objects.filter(pk__in=[f_id for f_id, _ in data.items()])
+        for f in friends:
             try:
-                friend_id = int(k.lstrip('last_contact_'))
-                friend = Friend.objects.get(pk=friend_id, user=request.user)
-                # Only bulk update on change
-                if friend.last_contact != v:
-                    friend.last_contact = v
-                    friends.append(friend)
-            except ValueError: # friend_id wasn't an int => bad request, abort
-                return HttpResponse(status=400)
-            except Friend.DoesNotExist: # user has no such friend => bad request, abort
-                return HttpResponse(status=400)
+                d = data[f.id]
+            except KeyError:
+                continue
+            if f.last_contact == d:
+                continue
+            f.last_contact = d
+            changed_friends.append(f)
 
-        Friend.objects.bulk_update(friends, ['last_contact'])
+        Friend.objects.bulk_update(changed_friends, ['last_contact'])
 
-        print(f'Updated {len(friends)} friends for user {request.user.id} ({request.user})')
+        print(f'Updated {len(changed_friends)} friends for user {request.user.id} ({request.user})')
         return HttpResponseRedirect(reverse_lazy("hey:checkins"))
