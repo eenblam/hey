@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Check-ins{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <h2>Check-ins</h2>
+    <form>
+        {% csrf_token %}
+        <input type="submit" value="Save" />
+        <ul>
+        {% for friend in friends %}
+            <li>
+                <label for="{{ friend.get_full_name }}-last-contact">
+                    {{ friend.get_full_name }}:
+                </label>
+                <input type="date"
+                    id="{{ friend.get_full_name }}-last-contact"
+                    name="{{ friend.get_full_name }}-last-contact"
+                    onchange="console.log(this.value)"
+                    value="{{ friend.last_contact|date:'Y-m-d' }}" />
+            </li>
+        {% endfor %}
+        </ul>
+    </form>
+{% else %}
+    <p>hey</p>
+{% endif %}
+{% endblock %}
+```

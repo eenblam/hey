@@ -4,10 +4,31 @@
 
 {% block styles %}
 <style>
-p.changed {
+tr.changed {
     background-color: rgb(254, 255, 168);
 }
 </style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function setToday(id) {
+        // May want .toLocaleDateString instead, if we can get ISO ordering required for <input type=date>
+        var today = new Date().toISOString().slice(0, 10);
+        var elt = document.getElementById(id);
+        elt.value = today;
+        // This doesn't get called when changed by JS, so we do so manually.
+        elt.onchange();
+    }
+
+    function setYesterday(id) {
+        var day = new Date();
+        day.setDate(day.getDate() - 1);
+        var elt = document.getElementById(id);
+        elt.value = day.toISOString().slice(0, 10);
+        elt.onchange();
+    }
+</script>
 {% endblock %}
 
 {% block content %}
@@ -15,8 +36,34 @@ p.changed {
     <h2>Check-ins</h2>
     <form method="post">
         {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% for hidden_field in form.hidden_fields %}
+            {{ hidden_field.errors }}
+            {{ hidden_field }}
+        {% endfor %}
+
         <input type="submit" value="Save" />
-        {{ form.as_p }}
+        <table>
+        {% for field in form.visible_fields %}
+        <tr>
+            <td>
+            {{ field.label_tag }}
+            </td>
+            <td>
+            {{ field }}
+            {% if field.errors %}
+                <br />{{ field.errors }}
+            {% endif %}
+            {% if field.help_text %}
+                <br />{{ field.help_text }}
+            {% endif %}
+            </td>
+            <td><button type="button" onclick='setYesterday("{{ field.id_for_label }}")'>Yesterday</button></td>
+            <td><button type="button" onclick='setToday("{{ field.id_for_label }}")'>Today</button></td>
+        </tr>
+        {% endfor %}
+        </table>
     </form>
 {% else %}
     <p>hey</p>

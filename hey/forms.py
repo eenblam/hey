@@ -38,7 +38,7 @@ class CheckinsForm(forms.Form):
                 widget=DateInput(
                     attrs={
                         'data-initial': friend.last_contact,
-                        'onchange': 'if (this.dataset.initial != this.value) { this.parentElement.classList.add("changed"); } else { this.parentElement.classList.remove("changed"); }'
+                        'onchange': 'if (this.dataset.initial != this.value) { this.parentElement.parentElement.classList.add("changed"); } else { this.parentElement.parentElement.classList.remove("changed"); }'
                         }
                 ),
                 required=False,
