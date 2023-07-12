@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -13,7 +14,10 @@ class FriendsView(LoginRequiredMixin, generic.ListView):
     model = Friend
 
     def get_queryset(self):
-        return Friend.objects.filter(user=self.request.user)
+        # We want to sort by group, but always put None/Null at the end.
+        return Friend.objects.filter(user=self.request.user).order_by(
+            F('group').asc(nulls_last=True),
+            F('last_contact').asc(nulls_last=True))
 
 class FriendView(LoginRequiredMixin, generic.DetailView):
     model = Friend

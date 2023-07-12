@@ -11,28 +11,33 @@
 <p><a href="{% url 'hey:friend-add' %}">Add a friend</a></p>
 
 {% if object_list %}
-<ul>
-    {% for friend in object_list %}
-    <li>
-        <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend.get_full_name }}</a>
+    {% regroup object_list by group as groups %}
+    {% for group in groups %}
+    <ul>
+        <h3>{{ group.grouper }}</h3>
+        Cadence: every {{ group.grouper.frequency }} {{ group.grouper.get_unit_display }}{{ group.grouper.frequency|pluralize:",s" }}
+        {% for friend in group.list %}
+        <li>
+            <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend.get_full_name }}</a>
 
-        {% if friend.last_contact %}(last contact: {{ friend.last_contact |style_last_contact }}){% endif %}
+            {% if friend.last_contact %}(last contact: {{ friend.last_contact |style_last_contact }}){% endif %}
 
-        <a href="{% url 'hey:friend-update' friend.id %}" title="Update">✏️</a>
+            <a href="{% url 'hey:friend-update' friend.id %}" title="Update">✏️</a>
 
-        {% if friend.birthday or friend.phone %}
-        <ul>
-            {% if friend.has_recent_birthday %}
-            <li>Birthday: {{ friend.birthday }}</li>
+            {% if friend.birthday or friend.phone %}
+            <ul>
+                {% if friend.has_recent_birthday %}
+                <li>Birthday: {{ friend.birthday }}</li>
+                {% endif %}
+                {% if friend.phone %}
+                <li>Phone: {{ friend.phone }}</li>
+                {% endif %}
+            </ul>
             {% endif %}
-            {% if friend.phone %}
-            <li>Phone: {{ friend.phone }}</li>
-            {% endif %}
-        </ul>
-        {% endif %}
-    </li>
+        </li>
+        {% endfor %}
+    </ul>
     {% endfor %}
-</ul>
 {% else %}
 <p>No friends yet. Try adding some!</p>
 {% endif %}
