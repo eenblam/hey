@@ -41,6 +41,9 @@ class CheckinsForm(forms.Form):
         self.id_list = []
 
         for friend in Friend.objects.filter(user=self.user):
+            if not friend.is_overdue():
+                continue
+
             self.id_list.append(friend.id)
 
             last_contact = forms.DateField(

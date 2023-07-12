@@ -43,6 +43,25 @@ class Friend(models.Model):
             return True
         return False
 
+    def next_contact(self):
+        """Returns the date of the next time this friend is due for contact.
+
+        None if the friend has no group or last_contact.
+        """
+        if self.last_contact is None or self.last_contact == "" or self.group is None:
+            return None
+        return self.last_contact + self.group.get_timedelta()
+
+    def is_overdue(self):
+        """Returns true if the friend is overdue for contact by end of this week"""
+        if self.next_contact() is None:
+            return False
+        today = date.today()
+        weekday = today.weekday()
+        end_of_week = today + timedelta(days=6 - weekday)
+        return self.next_contact() < end_of_week
+
+
 class Group(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -65,3 +84,11 @@ class Group(models.Model):
     # to redirect after a successful form submission.
     def get_absolute_url(self):
         return reverse('hey:group-detail', kwargs={'pk': self.pk})
+
+    def get_timedelta(self):
+        match self.unit:
+            case self.WEEK:
+                return timedelta(weeks=self.frequency)
+            case self.MONTH:
+                # Favor 30 day months
+                return timedelta(days=30*self.frequency)
