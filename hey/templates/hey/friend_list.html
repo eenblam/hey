@@ -4,6 +4,14 @@
 
 {% block title %}Friends{% endblock %}
 
+{% block styles %}
+<style>
+.overdue {
+    color: rgb(248, 57, 57);
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h2>Friends</h2>
@@ -18,11 +26,15 @@
         Cadence: every {{ group.grouper.frequency }} {{ group.grouper.get_unit_display }}{{ group.grouper.frequency|pluralize:",s" }}
         {% for friend in group.list %}
         <li>
+            <a href="{% url 'hey:friend-update' friend.id %}" title="Update">✏️</a>
             <a href="{% url 'hey:friend-detail' friend.id %}">{{ friend.get_full_name }}</a>
 
-            {% if friend.last_contact %}(last contact: {{ friend.last_contact |style_last_contact }}){% endif %}
+            {% if friend.last_contact %}
+            (last contact: <span {% if friend.is_overdue %}class="overdue"{% endif %}>
+                {{ friend.last_contact |style_last_contact }}
+            </span>)
+            {% endif %}
 
-            <a href="{% url 'hey:friend-update' friend.id %}" title="Update">✏️</a>
 
             {% if friend.birthday or friend.phone %}
             <ul>
