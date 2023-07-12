@@ -71,7 +71,7 @@ class Group(models.Model):
     DAY = "D"
     WEEK = "W"
     MONTH = "M"
-    UNIT_CHOICES = [(DAY, "Day"), (WEEK, "Week"), (MONTH, "Month")]
+    UNIT_CHOICES = [(DAY, "day"), (WEEK, "week"), (MONTH, "month")]
     unit = models.TextField(
         max_length = 1,
         choices=UNIT_CHOICES,
