@@ -68,9 +68,10 @@ class Group(models.Model):
     frequency = models.PositiveIntegerField(default=1)
 
     # Unit
+    DAY = "D"
     WEEK = "W"
     MONTH = "M"
-    UNIT_CHOICES = [(WEEK, "Week"), (MONTH, "Month")]
+    UNIT_CHOICES = [(DAY, "Day"), (WEEK, "Week"), (MONTH, "Month")]
     unit = models.TextField(
         max_length = 1,
         choices=UNIT_CHOICES,
@@ -87,6 +88,8 @@ class Group(models.Model):
 
     def get_timedelta(self):
         match self.unit:
+            case self.DAY:
+                return timedelta(days=self.frequency)
             case self.WEEK:
                 return timedelta(weeks=self.frequency)
             case self.MONTH:
