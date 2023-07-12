@@ -41,3 +41,23 @@ class Friend(models.Model):
         if abs(today - self.birthday) < m: 
             return True
         return False
+
+class Group(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    frequency = models.PositiveIntegerField(default=1)
+
+    # Unit
+    WEEK = "W"
+    MONTH = "M"
+    UNIT_CHOICES = [(WEEK, "Week"), (MONTH, "Month")]
+    unit = models.TextField(
+        max_length = 1,
+        choices=UNIT_CHOICES,
+        default=WEEK,
+    )
+
+    # This will be used automatically by CreateView/UpdateView
+    # to redirect after a successful form submission.
+    def get_absolute_url(self):
+        return reverse('hey:group-detail', kwargs={'pk': self.pk})

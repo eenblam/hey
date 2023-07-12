@@ -4,8 +4,8 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import FriendForm, CheckinsForm
-from .models import Friend
+from .forms import CheckinsForm, FriendForm, GroupForm
+from .models import Friend, Group
 
 # Create your views here.
 
@@ -78,3 +78,34 @@ class CheckinsView(LoginRequiredMixin, generic.TemplateView):
 
         print(f'Updated {len(changed_friends)} friends for user {request.user.id} ({request.user})')
         return HttpResponseRedirect(reverse_lazy("hey:checkins"))
+
+class GroupsView(LoginRequiredMixin, generic.ListView):
+    model = Group
+
+    def get_queryset(self):
+        return Group.objects.filter(user=self.request.user)
+
+class GroupView(LoginRequiredMixin, generic.DetailView):
+    model = Group
+
+    def get_object(self):
+        return Group.objects.get(user=self.request.user, pk=self.kwargs['pk'])
+
+class GroupCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Group
+    form_class = GroupForm
+
+    def form_valid(self, form):
+        # Link Group to user
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class GroupUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Group
+    form_class = GroupForm
+
+
+class GroupDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Group
+    success_url = reverse_lazy("hey:groups")

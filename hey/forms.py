@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Friend
+from .models import Friend, Group
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -19,6 +19,13 @@ class FriendForm(forms.ModelForm):
             'phone': forms.TextInput(),
             'last_contact': DateInput(),
         }
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        # Exclude "user" since we don't want that edited
+        fields = ['name', 'frequency', 'unit']
+
 
 class CheckinsForm(forms.Form):
     """

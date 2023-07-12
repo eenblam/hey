@@ -27,5 +27,10 @@ urlpatterns = [
     path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),
     path('friends/<int:pk>/delete', views.FriendDeleteView.as_view(), name='friend-delete'),
     path('friends/<int:pk>/update', views.FriendUpdateView.as_view(), name='friend-update'),
+    path('groups/', views.GroupsView.as_view(), name='groups'),
+    path('groups/add/', views.GroupCreateView.as_view(), name='group-add'),
+    path('groups/<int:pk>/', views.GroupView.as_view(), name='group-detail'),
+    path('groups/<int:pk>/delete', views.GroupDeleteView.as_view(), name='group-delete'),
+    path('groups/<int:pk>/update', views.GroupUpdateView.as_view(), name='group-update'),
     path('checkins/', views.CheckinsView.as_view(), name='checkins'),
 ]

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ object.name }}</h1>
+
+<p>
+    <a href="{% url 'hey:group-update' object.id %}">Update</a> |
+    <a href="{% url 'hey:group-delete' object.id %}">Delete</a>
+</p>
+
+<p>Every {{ object.frequency }} {{ object.get_unit_display }}{{ group.frequency|pluralize:",s" }}</p>
+
+{% endblock %}
