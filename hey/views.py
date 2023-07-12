@@ -87,7 +87,12 @@ class GroupsView(LoginRequiredMixin, generic.ListView):
     model = Group
 
     def get_queryset(self):
-        return Group.objects.filter(user=self.request.user)
+        # Order groups by (unit, frequency, name)
+        #TODO 8 days sorts before 1 week at present
+        return Group.objects.filter(user=self.request.user).order_by(
+            F('unit').asc(),
+            F('frequency').asc(),
+            'name')
 
 class GroupView(LoginRequiredMixin, generic.DetailView):
     model = Group

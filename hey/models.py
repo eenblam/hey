@@ -50,7 +50,10 @@ class Friend(models.Model):
         """
         if self.last_contact is None or self.last_contact == "" or self.group is None:
             return None
-        return self.last_contact + self.group.get_timedelta()
+        try:
+            return self.last_contact + self.group.get_timedelta()
+        except RuntimeError:
+            return None
 
     def is_overdue(self):
         """Returns true if the friend is overdue for contact by end of this week"""
@@ -68,12 +71,14 @@ class Group(models.Model):
     frequency = models.PositiveIntegerField(default=1)
 
     # Unit
-    DAY = "D"
-    WEEK = "W"
-    MONTH = "M"
+    # Note that using integers here instead of 'D' 'W' 'M' and models.CharField
+    # means that we can sort Groups by (unit, frequency, name) to order by tightest cadence.
+    #TODO 8 days sorts before 1 week at present
+    DAY = 0
+    WEEK = 1
+    MONTH = 2
     UNIT_CHOICES = [(DAY, "day"), (WEEK, "week"), (MONTH, "month")]
-    unit = models.TextField(
-        max_length = 1,
+    unit = models.PositiveSmallIntegerField(
         choices=UNIT_CHOICES,
         default=WEEK,
     )
@@ -95,3 +100,4 @@ class Group(models.Model):
             case self.MONTH:
                 # Favor 30 day months
                 return timedelta(days=30*self.frequency)
+        raise RuntimeError(f"Unexpected unit {self.unit}")
