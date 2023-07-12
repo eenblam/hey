@@ -34,4 +34,5 @@
 <p>Status: {{ object.status }}</p>
 {% endif %}
 
+<p>Group: {{ object.group|default_if_none:"None" }}</p>
 {% endblock %}

@@ -15,6 +15,7 @@ class Friend(models.Model):
     phone = models.TextField(blank=True, verbose_name="phone number")
     last_contact = models.DateField(blank=True, null=True)
     status = models.TextField(blank=True)
+    group = models.ForeignKey('Group', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         if self.last_name != "":

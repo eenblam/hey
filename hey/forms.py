@@ -10,7 +10,7 @@ class FriendForm(forms.ModelForm):
         model = Friend
         # Exclude "user" since we don't want that edited
         fields = ['first_name', 'last_name',
-                  'phone', 'birthday', 'last_contact', 'status']
+                  'phone', 'birthday', 'last_contact', 'status', 'group']
         widgets = {
             # We want an `input` instead of a `textarea`
             'first_name': forms.TextInput(),
