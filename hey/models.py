@@ -56,13 +56,22 @@ class Friend(models.Model):
             return None
 
     def is_overdue(self):
-        """Returns true if the friend is overdue for contact by end of this week"""
-        if self.next_contact() is None:
+        """Returns true if the friend is overdue for contact.
+        
+        Contacts given in days are computed exactly.
+        Otherwise, a contact is overdu eif next_contact is by end of week.
+        """
+        next_contact = self.next_contact()
+        if next_contact is None:
             return False
+
+        if self.group.unit == Group.DAY:
+            return next_contact <= date.today()
+
         today = date.today()
         weekday = today.weekday()
         end_of_week = today + timedelta(days=6 - weekday)
-        return self.next_contact() < end_of_week
+        return next_contact <= end_of_week
 
 
 class Group(models.Model):
