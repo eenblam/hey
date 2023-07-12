@@ -57,6 +57,9 @@ class Group(models.Model):
         default=WEEK,
     )
 
+    def __str__(self):
+        return self.name
+
     # This will be used automatically by CreateView/UpdateView
     # to redirect after a successful form submission.
     def get_absolute_url(self):
