@@ -34,7 +34,8 @@ class CheckinsForm(forms.Form):
 
         for friend in Friend.objects.filter(user=self.user):
             self.id_list.append(friend.id)
-            self.fields['last_contact_%s' % friend.id] = forms.DateField(
+
+            last_contact = forms.DateField(
                 widget=DateInput(
                     attrs={
                         'data-initial': friend.last_contact,
@@ -45,3 +46,33 @@ class CheckinsForm(forms.Form):
                 label=friend.get_full_name(),
                 initial=friend.last_contact
             )
+            last_contact.group = friend.id
+            self.fields['last_contact_%s' % friend.id] = last_contact
+
+            status = forms.CharField(
+                widget=forms.TextInput(
+                    attrs={
+                        'data-initial': friend.status,
+                        'onchange': 'if (this.dataset.initial != this.value) { this.parentElement.parentElement.classList.add("changed"); } else { this.parentElement.parentElement.classList.remove("changed"); }'
+                        }
+                ),
+                required=False,
+                label="Status:",
+                initial=friend.status
+            )
+            status.group = friend.id
+            self.fields['status_%s' % friend.id] = status
+
+    def get_context(self, **kwargs):
+        context = super(CheckinsForm, self).get_context(**kwargs)
+        fields = {}
+        for bound_field in context['fields']:
+            f = bound_field[0]
+            fields[f.id_for_label.lstrip('id_')] = f
+
+        data = [{
+                'last_contact': fields[f'last_contact_{x}'],
+                'status': fields[f'status_{x}']
+                } for x in self.id_list]
+        context['subforms'] = data
+        return context

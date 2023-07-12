@@ -45,22 +45,22 @@ tr.changed {
 
         <input type="submit" value="Save" />
         <table>
-        {% for field in form.visible_fields %}
+        {% for record in form.subforms %}
         <tr>
+            <td>{{ record.last_contact.label_tag }}</td>
             <td>
-            {{ field.label_tag }}
-            </td>
-            <td>
-            {{ field }}
-            {% if field.errors %}
-                <br />{{ field.errors }}
+            {{ record.last_contact }}
+            {% if record.last_contact.errors %}
+                <br />{{ record.last_contact.errors }}
             {% endif %}
-            {% if field.help_text %}
-                <br />{{ field.help_text }}
+            {% if record.last_contact.help_text %}
+                <br />{{ record.last_contact.help_text }}
             {% endif %}
             </td>
-            <td><button type="button" onclick='setYesterday("{{ field.id_for_label }}")'>Yesterday</button></td>
-            <td><button type="button" onclick='setToday("{{ field.id_for_label }}")'>Today</button></td>
+            <td><button type="button" onclick='setYesterday("{{ record.last_contact.id_for_label }}")'>Yesterday</button></td>
+            <td><button type="button" onclick='setToday("{{ record.last_contact.id_for_label }}")'>Today</button></td>
+            <td>{{ record.status.label_tag }}</td>
+            <td>{{ record.status }}</td>
         </tr>
         {% endfor %}
         </table>

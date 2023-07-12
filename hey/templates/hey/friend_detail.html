@@ -30,4 +30,8 @@
 <p>Last contact: {{ object.last_contact }}</p>
 {% endif %}
 
+{% if object.status %}
+<p>Status: {{ object.status }}</p>
+{% endif %}
+
 {% endblock %}

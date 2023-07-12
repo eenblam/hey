@@ -14,6 +14,7 @@ class Friend(models.Model):
     #TODO don't want to restrict by char count for internationalization
     phone = models.TextField(blank=True, verbose_name="phone number")
     last_contact = models.DateField(blank=True, null=True)
+    status = models.TextField(blank=True)
 
     def __str__(self):
         if self.last_name != "":
