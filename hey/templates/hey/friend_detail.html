@@ -4,9 +4,13 @@
 
 {% block content %}
 {% if object.last_name %}
-<h1>{{ object.first_name }} {{ object.last_name }}</h1>
+<h1>
+    {{ object.first_name }} {{ object.last_name }} {% if object.pronouns %}({{ object.pronouns }}){% endif %}
+</h1>
 {% else %}
-<h1>{{ object.first_name }}</h1>
+<h1>
+    {{ object.first_name }} {% if object.pronouns %}({{ object.pronouns }}){% endif %}
+</h1>
 {% endif %}
 
 <p>

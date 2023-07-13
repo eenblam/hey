@@ -9,6 +9,7 @@ class Friend(models.Model):
 
     first_name = models.TextField() # required
     last_name = models.TextField(blank=True)
+    pronouns = models.TextField(blank=True)
     #TODO timezones?
     birthday = models.DateField("birthday", blank=True, null=True)
     #TODO don't want to restrict by char count for internationalization
