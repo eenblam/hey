@@ -12,7 +12,7 @@
             {% if user.is_authenticated %}
                 <p>
                 Logged in as {{ user.username }}.
-                (<a href="{% url 'hey:home' %}">Home</a> |
+                (<a href="{% url 'hey:checkins' %}">Home</a> |
                 <a href="{% url 'hey:friends' %}">Friends</a> |
                 <a href="{% url 'hey:groups' %}">Groups</a> |
                 <a href="{% url 'logout' %}">Logout</a>)
