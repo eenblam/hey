@@ -1,5 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.db.models import F
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -8,7 +11,7 @@ from django.views import generic
 from .forms import CheckinsForm, FriendForm, GroupForm
 from .models import Friend, Group
 
-# Create your views here.
+User = get_user_model()
 
 class FriendsView(LoginRequiredMixin, generic.ListView):
     model = Friend
@@ -33,6 +36,18 @@ class FriendCreateView(LoginRequiredMixin, generic.CreateView):
         # Link Friend to user
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+@receiver(post_save, sender=User)
+def create_default_groups(sender, **kwargs):
+    print("Called")
+    if kwargs.get('created', False):
+        print("Creating default groups")
+        Group.objects.bulk_create([
+            Group(name="Besties", frequency = 2, unit = Group.DAY, user=kwargs['instance']),
+            Group(name="Close Friends", frequency = 1, unit = Group.WEEK, user=kwargs['instance']),
+            Group(name="Friends", frequency = 1, unit = Group.MONTH, user=kwargs['instance'])
+        ])
 
 
 class FriendUpdateView(LoginRequiredMixin, generic.UpdateView):
