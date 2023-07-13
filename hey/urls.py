@@ -22,6 +22,7 @@ from . import views
 app_name = 'hey'
 
 urlpatterns = [
+    path('', views.CheckinsView.as_view(), name='home'),
     path('friends/', views.FriendsView.as_view(), name='friends'),
     path('friends/add/', views.FriendCreateView.as_view(), name='friend-add'),
     path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),
@@ -32,5 +33,4 @@ urlpatterns = [
     path('groups/<int:pk>/', views.GroupView.as_view(), name='group-detail'),
     path('groups/<int:pk>/delete', views.GroupDeleteView.as_view(), name='group-delete'),
     path('groups/<int:pk>/update', views.GroupUpdateView.as_view(), name='group-update'),
-    path('checkins/', views.CheckinsView.as_view(), name='checkins'),
 ]
