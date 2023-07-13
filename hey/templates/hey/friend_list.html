@@ -22,11 +22,14 @@
     {% regroup object_list by group as groups %}
     {% for group in groups %}
     <ul>
-        <h3>{{ group.grouper }}</h3>
-
+        <h3>
         {% if group.grouper is not None %}
-            Cadence: every {{ group.grouper.frequency }} {{ group.grouper.get_unit_display }}{{ group.grouper.frequency|pluralize:",s" }}
+            {{ group.grouper }}
+            (every {{ group.grouper.frequency }} {{ group.grouper.get_unit_display }}{{ group.grouper.frequency|pluralize:",s" }})
+        {% else %}
+            Ungrouped (no contact cadence)
         {% endif %}
+        </h3>
 
         {% for friend in group.list %}
         <li>
