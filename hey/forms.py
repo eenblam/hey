@@ -28,6 +28,22 @@ class FriendForm(forms.ModelForm):
             'status': forms.TextInput(),
         }
 
+    def __init__(self, *args, **kwargs):
+        """Ensure user can only view and add to their own groups.
+
+        If this wasn't here, the user could see all existing groups in the form,
+        or post a request assigning a friend to an arbitrary group.
+        This prevents both.
+        """
+        self.user = kwargs.pop('user')
+
+        super(FriendForm, self).__init__(*args, **kwargs)
+
+        if self.user:
+            self.fields['group'].queryset = self.user.group_set.all()
+        else:
+            raise RuntimeError("User not set")
+
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group

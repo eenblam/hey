@@ -85,6 +85,11 @@ class FriendCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        """Pass user to form."""
+        kwargs = super(FriendCreateView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 @receiver(post_save, sender=User)
 def bootstrap_new_user(sender, **kwargs):
@@ -102,6 +107,11 @@ class FriendUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Friend
     form_class = FriendForm
 
+    def get_form_kwargs(self):
+        """Pass user to form."""
+        kwargs = super(FriendUpdateView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 class FriendDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Friend
