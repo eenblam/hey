@@ -32,3 +32,23 @@ I'm building Hey because it's a tool I've wanted for a long time,
 and I also wanted an excuse to learn Django and a bit of front-end development.
 So I'm taking [some good advice](https://mitchellh.com/writing/building-large-technical-projects#build-for-yourself)
 to focus on building things that I personally use.
+
+## Setup
+
+```bash
+git clone https://github.com/eenblam/hey
+cd hey
+python3 -m venv venv
+. venv/bin/activate
+pip3 install -r requirements.txt
+# Set up your database
+./manage.py migrate
+# This is on your path after installing, as long as the venv is active
+django-admin createsuperuser
+# Bundle up static assets into static/
+# For example, the Django admin UI.
+# I haven't vendored that as a dependency, since I'm not sure how I'll license yet.
+./manage.py collectstatic 
+```
+
+Now, you can just start the app with `./manage.py runserver`.
