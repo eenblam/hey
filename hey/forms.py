@@ -1,6 +1,12 @@
 from django import forms
 
-from .models import Friend, Group
+from .models import Account, Friend, Group
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['timezone']
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'

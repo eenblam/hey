@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.first_name }}{% endblock %}
+
+{% block content %}
+<h1>Account</h1>
+<p>
+    <a href="{% url 'hey:account-update'  %}">Update</a> |
+    <a href="{% url 'hey:account-delete'  %}">Delete</a>
+</p>
+
+<p>Username: {{ object.user.username }}</p>
+<p>Timezone: {{ object.timezone_string }}</p>
+{% endblock %}

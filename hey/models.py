@@ -1,9 +1,33 @@
 from datetime import date, timedelta
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
+
+def validate_tz_offset(value):
+    """Don't allow undefined timezone offsets"""
+    if not (-12 <= value <= 12):
+        raise ValidationError(
+            _("%(value)s is not a valid timezone"),
+            params={"value": value},
+        )
+
+
+class Account(models.Model):
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    timezone = models.SmallIntegerField(default=0, validators=[validate_tz_offset])
+
+    def get_absolute_url(self):
+        return reverse('hey:account-detail')
+
+    def timezone_string(self):
+        tz = timezone.get_fixed_timezone(timedelta(hours=self.timezone))
+        return f'UTC{tz}'
+
+
 class Friend(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 

@@ -23,6 +23,9 @@ app_name = 'hey'
 
 urlpatterns = [
     path('', views.CheckinsView.as_view(), name='checkins'),
+    path('account/', views.AccountView.as_view(), name='account-detail'),
+    path('account/update', views.AccountUpdateView.as_view(), name='account-update'),
+    path('account/delete', views.AccountDeleteView.as_view(), name='account-delete'),
     path('friends/', views.FriendsView.as_view(), name='friends'),
     path('friends/add/', views.FriendCreateView.as_view(), name='friend-add'),
     path('friends/<int:pk>/', views.FriendView.as_view(), name='friend-detail'),

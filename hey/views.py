@@ -4,14 +4,62 @@ from django.db.models import F
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
+from django.contrib.sessions.models import Session
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import CheckinsForm, FriendForm, GroupForm
-from .models import Friend, Group
+from .forms import AccountForm, CheckinsForm, FriendForm, GroupForm
+from .models import Account, Friend, Group
 
 User = get_user_model()
+
+class AccountView(LoginRequiredMixin, generic.DetailView):
+    model = Account
+
+    def get_object(self):
+        return Account.objects.get(user=self.request.user)
+
+
+class AccountUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Account
+    form_class = AccountForm
+
+    def get_object(self):
+        """Fetch user, assuming pk isn't being provided by urlconf"""
+        account = Account.objects.get(user=self.request.user)
+        return account
+
+
+class AccountDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Account
+    # Doesn't exactly matter - it'll just redirect the user to Login.
+    success_url = reverse_lazy("signup")
+
+    def get_object(self):
+        """Fetch user, assuming pk isn't being provided by urlconf"""
+        account = Account.objects.get(user=self.request.user)
+        return account
+
+    def form_valid(self, form):
+        """Log user out before deleting"""
+        try:
+            #user = User.objects.get(id=self.request.user)
+            user = self.request.user
+            # https://stackoverflow.com/questions/953879/how-to-force-a-user-logout-in-django
+            # Lock out
+            user.is_active = False
+            user.save()
+            # Revoke sessions
+            # This is tied to using database-backed sessions, which is perhaps not what's best long-term
+            [s.delete() for s in Session.objects.all() if s.get_decoded().get('_auth_user_id') == user.id]
+            # Finally, delete
+            user.delete()
+        except User.DoesNotExist:
+            pass
+
+        return super().form_valid(form)
+
 
 class FriendsView(LoginRequiredMixin, generic.ListView):
     model = Friend
@@ -39,14 +87,14 @@ class FriendCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 @receiver(post_save, sender=User)
-def create_default_groups(sender, **kwargs):
-    print("Called")
+def bootstrap_new_user(sender, **kwargs):
     if kwargs.get('created', False):
-        print("Creating default groups")
+        user = kwargs['instance']
+        Account.objects.create(user=user) # use default timezone
         Group.objects.bulk_create([
-            Group(name="Besties", frequency = 2, unit = Group.DAY, user=kwargs['instance']),
-            Group(name="Close Friends", frequency = 1, unit = Group.WEEK, user=kwargs['instance']),
-            Group(name="Friends", frequency = 1, unit = Group.MONTH, user=kwargs['instance'])
+            Group(name="Besties", frequency = 2, unit = Group.DAY, user=user),
+            Group(name="Close Friends", frequency = 1, unit = Group.WEEK, user=user),
+            Group(name="Friends", frequency = 1, unit = Group.MONTH, user=user)
         ])
 
 
