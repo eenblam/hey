@@ -9,6 +9,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .cache import delete_user_tz
 from .forms import AccountForm, CheckinsForm, FriendForm, GroupForm
 from .models import Account, Friend, Group
 
@@ -30,6 +31,11 @@ class AccountUpdateView(LoginRequiredMixin, generic.UpdateView):
         account = Account.objects.get(user=self.request.user)
         return account
 
+    def form_valid(self, form):
+        # purge timezone from cache if changed
+        if 'timezone' in form.changed_data:
+            delete_user_tz(self.request.user)
+        return super().form_valid(form)
 
 class AccountDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Account

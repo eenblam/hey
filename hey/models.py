@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from .cache import get_user_tz
 
 def validate_tz_offset(value):
     """Don't allow undefined timezone offsets"""
@@ -61,7 +62,7 @@ class Friend(models.Model):
         if self.birthday is None or self.birthday == "":
             return False
 
-        today = date.today()
+        today = timezone.localdate(timezone=get_user_tz(self.user))
         m = timedelta(weeks=4)
         today = today.replace(year=self.birthday.year)
         if abs(today - self.birthday) < m: 
@@ -84,16 +85,17 @@ class Friend(models.Model):
         """Returns true if the friend is overdue for contact.
         
         Contacts given in days are computed exactly.
-        Otherwise, a contact is overdu eif next_contact is by end of week.
+        Otherwise, a contact is overdue if next_contact is by end of week.
         """
         next_contact = self.next_contact()
         if next_contact is None:
             return False
 
-        if self.group.unit == Group.DAY:
-            return next_contact <= date.today()
+        today = timezone.localdate(timezone=get_user_tz(self.user))
 
-        today = date.today()
+        if self.group.unit == Group.DAY:
+            return next_contact <= today
+
         weekday = today.weekday()
         end_of_week = today + timedelta(days=6 - weekday)
         return next_contact <= end_of_week
