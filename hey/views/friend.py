@@ -16,7 +16,10 @@ class FriendsView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         # We want to sort by group, but always put None/Null at the end.
+        # We also need to sort into group in advance so that the template can regroup by group.
         return Friend.objects.filter(user=self.request.user).order_by(
+            F('group__unit').asc(nulls_last=True),
+            F('group__frequency').asc(nulls_last=True),
             F('group__name').asc(nulls_last=True),
             F('last_contact').asc(nulls_last=True))
 
