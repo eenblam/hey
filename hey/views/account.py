@@ -29,7 +29,7 @@ class AccountUpdateView(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         # purge timezone from cache if changed
         if 'timezone' in form.changed_data:
-            delete_user_tz(self.request.user)
+            delete_user_tz(self.request.user.id)
         return super().form_valid(form)
 
 

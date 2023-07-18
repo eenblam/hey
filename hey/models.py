@@ -62,7 +62,7 @@ class Friend(models.Model):
         if self.birthday is None or self.birthday == "":
             return False
 
-        today = timezone.localdate(timezone=get_user_tz(self.user))
+        today = timezone.localdate(timezone=get_user_tz(self.user_id))
         m = timedelta(weeks=4)
         today = today.replace(year=self.birthday.year)
         if abs(today - self.birthday) < m: 
@@ -91,7 +91,7 @@ class Friend(models.Model):
         if next_contact is None:
             return False
 
-        today = timezone.localdate(timezone=get_user_tz(self.user))
+        today = timezone.localdate(timezone=get_user_tz(self.user_id))
 
         if self.group.unit == Group.DAY:
             return next_contact <= today
