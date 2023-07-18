@@ -12,6 +12,7 @@ whitenoise = "6.5.0"
 
 [tool.poetry.group.dev.dependencies]
 time-machine = "2.11.0"
+coverage = "^7.2.7"
 
 [build-system]
 requires = ["poetry-core"]

@@ -64,4 +64,7 @@ django-admin createsuperuser
 ./manage.py collectstatic 
 ```
 
-Now, you can just start the app with `./manage.py runserver`.
+Now, you can:
+* start the app with `./manage.py runserver`.
+* run tests with `./manage.py test`
+* see test coverage by running `coverage run --source='.' manage.py test hey` then `coverage report -m` (...it's a work in progress :p)
