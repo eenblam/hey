@@ -5,7 +5,7 @@ from django.test import TestCase
 
 import time_machine
 
-from .models import Friend
+from ..models import Friend
 
 User = get_user_model()
 
