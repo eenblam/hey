@@ -38,9 +38,22 @@ to focus on building things that I personally use.
 ```bash
 git clone https://github.com/eenblam/hey
 cd hey
+```
+
+Now you can continue using Python's venv...
+```bash
 python3 -m venv venv
 . venv/bin/activate
 pip3 install -r requirements.txt
+```
+
+... or with Poetry...
+```bash
+poetry install
+poetry shell
+```
+
+```bash
 # Set up your database
 ./manage.py migrate
 # This is on your path after installing, as long as the venv is active

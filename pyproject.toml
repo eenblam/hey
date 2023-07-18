@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "hey"
+version = "0.0.1"
+description = "hey is a Django app for managing and growing personal connections"
+authors = ["eenblam <eenblam@riseup.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "4.2.2"
+whitenoise = "6.5.0"
+
+[tool.poetry.group.dev.dependencies]
+time-machine = "2.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+runserver = "./manage.py runserver"
