@@ -63,7 +63,8 @@ class CheckinsForm(forms.Form):
         self.user = user
         self.id_list = []
 
-        for friend in Friend.objects.filter(user=self.user):
+        # Prefetch groups for timedeltas in Friend.is_overdue()
+        for friend in Friend.objects.filter(user=self.user).select_related('group'):
             if not friend.is_overdue():
                 continue
 
