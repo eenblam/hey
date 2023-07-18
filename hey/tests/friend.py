@@ -137,6 +137,5 @@ class FriendTestCase(TestCase):
         # Push them from Saturday to Monday. They should no longer be overdue.
         lastmonth.last_contact += dt.timedelta(days=2)
         lastweek.last_contact += dt.timedelta(days=2)
-        print(lastmonth.last_contact)
         assert not lastmonth._is_overdue(self.TZ_GMT)
         assert not lastweek._is_overdue(self.TZ_GMT)
