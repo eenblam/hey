@@ -144,6 +144,6 @@ class Group(models.Model):
             case self.WEEK:
                 return timedelta(weeks=self.frequency)
             case self.MONTH:
-                # Favor 30 day months
-                return timedelta(days=30*self.frequency)
+                # Favor 28 day months for now
+                return timedelta(weeks=4*self.frequency)
         raise RuntimeError(f"Unexpected unit {self.unit}")
