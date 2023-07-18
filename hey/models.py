@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -86,12 +86,22 @@ class Friend(models.Model):
         
         Contacts given in days are computed exactly.
         Otherwise, a contact is overdue if next_contact is by end of week.
+
+        Lifts cache/DB I/O in get_user_tz out of _is_overdue().
+        """
+        return self._is_overdue(tz=get_user_tz(self.user_id))
+
+    def _is_overdue(self, tz: timezone.timezone) -> bool:
+        """Cache-independent implementation of is_overdue().
+
+        Contacts given in days are computed exactly.
+        Otherwise, a contact is overdue if next_contact is by end of week.
         """
         next_contact = self.next_contact()
         if next_contact is None:
             return False
 
-        today = timezone.localdate(timezone=get_user_tz(self.user_id))
+        today = timezone.localdate(timezone=tz)
 
         if self.group.unit == Group.DAY:
             return next_contact <= today
