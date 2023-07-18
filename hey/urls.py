@@ -23,6 +23,7 @@ app_name = 'hey'
 
 urlpatterns = [
     path('', views.CheckinsView.as_view(), name='checkins'),
+    path('about/', views.AboutView.as_view(), name='about'),
     path('account/', views.AccountView.as_view(), name='account-detail'),
     path('account/update', views.AccountUpdateView.as_view(), name='account-update'),
     path('account/delete', views.AccountDeleteView.as_view(), name='account-delete'),

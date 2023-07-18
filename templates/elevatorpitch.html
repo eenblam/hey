@@ -1,0 +1,10 @@
+<p>
+    {% if user.is_authenticated %}
+        Here's where you can track your friends that are overdue for contact.
+        If you don't have any yet, you can visit your <a href="{% url 'hey:friends' %}">friends list</a> to add some.
+        If you're not sure what this is all about, you can read about it <a href="{% url 'hey:about' %}">here</a>.
+    {% else %}
+        Welcome to hey - a little tool for keeping up with your personal relationships.
+        You can learn more <a href="{% url 'hey:about' %}">here</a>.
+    {% endif %}
+</p>

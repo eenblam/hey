@@ -32,7 +32,9 @@ tr.changed {
 {% endblock %}
 
 {% block content %}
+    <h2>hey</h2></2>
 {% if user.is_authenticated %}
+    {% include 'elevatorpitch.html' %}
     <h2>Check-ins</h2>
     <form method="post">
         {% csrf_token %}
@@ -65,7 +67,5 @@ tr.changed {
         {% endfor %}
         </table>
     </form>
-{% else %}
-    <p>hey</p>
 {% endif %}
 {% endblock %}

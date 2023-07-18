@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}About hey{% endblock %}
+
+{% block content %}
+<h2>About hey</h2>
+<p>
+    Hey is a personal relationship manager, kinda like
+    <a href="https://github.com/monicahq/monica">Monica</a>,
+    but... a lot smaller.
+    Think of it as a focused tool for managing your contacts - and when you last contacted them - without social media.
+</p>
+
+<h3>Overview</h3>
+<p>
+    To use hey, you just list your friends and put them into groups.
+    Each group represents a cadence for how often you want to touch base with its friends,
+    for example "every two days" or "once a week."
+</p>
+<p>
+    Hey will help you remember when to follow-up with folks when it's time to.
+</p>
+<h3>Getting started</h3>
+<p>
+    Once you've <a href="{% url 'signup' %}">signed up</a>,
+    add some people you care about staying in touch with to your
+    <a href="{% url 'hey:friends' %}">friends list</a>.
+    Hey has already created a few default groups for you, so you can get straight to adding friends to them:
+</p>
+<ul>
+    <li>Besties: every two days</li>
+    <li>Close friends: every week</li>
+    <li>Friends: every month (28 days)</li>
+</ul>
+<p>
+    Don't worry - you can rename groups, add more, and change their cadences on your
+    <a href="{% url 'hey:groups' %}">groups</a> page.
+</p>
+<p>
+    Once you have some friends in your list,
+    hey will show you which are due for contact on your
+    <a href="{% url 'hey:checkins' %}">home</a> page.
+    Here, you can log the date you were last in touch with a friend,
+    whether that was a text, call, hangout, dinner, whatever.
+    You can use the "Yesterday" and "Today" buttons for convenience,
+    or set a specific date using the datepicker widget.
+</p>
+<p>
+    You can also set a status for each friend, which could be used a number of different ways.
+    This might be something you need to follow up on:
+    a birthday coming up, a job interview to ask about, a hard conversation to have.
+    It could also be used more loosely for setting intentions with that friend:
+    <em>"hit the gym together,"</em>
+    <em>"out of town til May,"</em>
+    <em>"try to hang more,"</em> etc.
+</p>
+<p>
+    Regardless, be sure to hit "Save" whenever you're done updating information!
+</p>
+<h3>Setting your timezone</h3>
+<p>
+    When hey decides which friends are overdue for contact,
+    it uses UTC+0000 (GMT) to decide the current day.
+    This can be confusing if you're in a different timezone,
+    so it's helpful to tell hey about yours on your
+    <a href="{% url 'hey:account-detail' %}">account</a> page
+    for the best experience.
+</p>
+<p>
+    To find out your UTC timezone offset, you can visit timeanddate.com at
+    <a href="https://www.timeanddate.com/time/zone/timezone/utc">this link</a>
+    to search for your current location.
+    Look for the "Current Offset" field.
+    For example, San Francisco, CA, is UTC-7, so you would set your timezone to -7.
+</p>
+<p>
+    Note that your timezone will change if your location observes Daylight Savings Time.
+</p>
+
+{% endblock %}

@@ -1,3 +1,4 @@
+from .about import *
 from .account import *
 from .checkins import *
 from .friend import *
