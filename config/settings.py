@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
+    'rest_framework',
     'hey.apps.HeyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
