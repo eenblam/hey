@@ -15,11 +15,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
 from . import views
+from . import api_views
 
 app_name = 'hey'
+
+router = routers.DefaultRouter()
+router.register(r'friends', api_views.FriendsViewSet, basename='friend')
 
 urlpatterns = [
     path('', views.CheckinsView.as_view(), name='checkins'),
@@ -37,4 +42,6 @@ urlpatterns = [
     path('groups/<int:pk>/', views.GroupView.as_view(), name='group-detail'),
     path('groups/<int:pk>/delete', views.GroupDeleteView.as_view(), name='group-delete'),
     path('groups/<int:pk>/update', views.GroupUpdateView.as_view(), name='group-update'),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
