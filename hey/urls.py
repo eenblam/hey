@@ -25,6 +25,7 @@ app_name = 'hey'
 
 router = routers.DefaultRouter()
 router.register(r'friends', api_views.FriendsViewSet, basename='friend')
+router.register(r'checkins', api_views.CheckinsViewSet, basename='checkin')
 
 urlpatterns = [
     path('', views.CheckinsView.as_view(), name='checkins'),

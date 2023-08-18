@@ -6,7 +6,6 @@ from ..serializers import FriendSerializer
 class FriendsViewSet(ModelViewSet):
     serializer_class = FriendSerializer
     def get_queryset(self):
-        #TODO select_related('group')?
         return Friend.objects.filter(user=self.request.user.id).select_related('group')
 
     def perform_create(self, serializer):
