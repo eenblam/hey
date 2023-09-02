@@ -23,9 +23,12 @@ from . import api_views
 
 app_name = 'hey'
 
+# Note that these basenames can't just be "friend" since the view set will generate
+# reverse URL entries for things like "friend-add" and override the below URL patterns.
+# So use "friend-api" to produce "friend-api-add" instead.
 router = routers.DefaultRouter()
-router.register(r'friends', api_views.FriendsViewSet, basename='friend')
-router.register(r'checkins', api_views.CheckinsViewSet, basename='checkin')
+router.register(r'friends', api_views.FriendsViewSet, basename='friend-api')
+router.register(r'checkins', api_views.CheckinsViewSet, basename='checkin-api')
 
 urlpatterns = [
     path('', views.CheckinsView.as_view(), name='checkins'),
