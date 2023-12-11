@@ -34,24 +34,36 @@ So I'm taking [some good advice](https://mitchellh.com/writing/building-large-te
 to focus on building things that I personally use.
 
 ## Setup
+Get the goods:
 
 ```bash
 git clone https://github.com/eenblam/hey
 cd hey
 ```
 
-Now you can continue using Python's venv...
+### With Poetry+Poe
+
+```bash
+poetry install --sync  # Install current poetry.lock
+poetry shell           # Get a shell
+poe setup              # Create superuser
+poe migrate            # Run database migrations
+poe static             # Generate static assets, like Django admin UI
+poe test               # Run tests
+poe coverage           # See test coverage info
+poe run                # Start local server in foreground
+```
+
+### Classic setup
+Create a venv
+
 ```bash
 python3 -m venv venv
 . venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-... or with Poetry...
-```bash
-poetry install
-poetry shell
-```
+...then you can run...
 
 ```bash
 # Set up your database

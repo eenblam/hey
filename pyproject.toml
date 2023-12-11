@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "hey"
-version = "0.0.1"
-description = "hey is a Django app for managing and growing personal connections"
-authors = ["eenblam <eenblam@riseup.net>"]
-readme = "README.md"
+name = 'hey'
+version = '0.0.1'
+description = 'hey is a Django app for managing and growing personal connections'
+authors = ['eenblam <eenblam@riseup.net>']
+readme = 'README.md'
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -11,12 +11,20 @@ Django = "4.2.2"
 whitenoise = "6.5.0"
 
 [tool.poetry.group.dev.dependencies]
-time-machine = "2.11.0"
-coverage = "^7.2.7"
+time-machine = '2.11.0'
+coverage = '^7.2.7'
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
 
-[tool.poetry.scripts]
-runserver = "./manage.py runserver"
+[tool.poe.tasks]
+run = './manage.py runserver'
+migrate = './manage.py migrate'
+setup = 'django-admin createsuperuser'
+# Bundle up static assets into static/
+# For example, the Django admin UI.
+# I haven't vendored that as a dependency, since I'm not sure how I'll license yet.
+static = './manage.py collectstatic'
+test = './manage.py test'
+coverage = 'coverage run --source="." manage.py test hey && coverage report -m'
