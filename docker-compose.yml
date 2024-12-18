@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  hey:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: ./hey.sqlite3
+        target: /app/hey.sqlite3
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.development
+

@@ -42,6 +42,10 @@ cd hey
 ```
 
 ### With Poetry+Poe
+You'll need a system install of Poetry.
+
+[Poe](https://poethepoet.natn.io/poetry_plugin.html) is installed as a dev dependency
+for local development.
 
 ```bash
 poetry install --sync  # Install current poetry.lock
@@ -54,3 +58,19 @@ poe coverage           # See test coverage info
 poe run                # Start local server in foreground
 ```
 
+### With Docker
+If you already have a `hey.sqlite3` database from running without a container, then you just need `docker compose up`.
+
+Otherwise, you'll need to jump through a few initial hoops to create the database within Docker:
+
+* Comment out the `volumes` section of `docker-compose.yml`.
+* `docker compose up` to start; this will create your DB file
+* `docker compose exec hey /bin/bash`
+* `poetry shell`
+    * (Dev dependencies aren't installed in the image, so no Poe commands.)
+    * `./manage.py migrate`
+    * `./manage.py createsuperuser`
+* Exit the container
+* Get the container name (e.g. hey-hey-1) via `docker compose ps`
+* `docker cp hey-hey-1:/app/hey.sqlite3 hey.sqlite3`
+* Un-comment the `volumes` section of `docker-compose.yml` and restart the composition.
