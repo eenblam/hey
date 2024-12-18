@@ -13,8 +13,8 @@ tr.changed {
 {% block scripts %}
 <script>
     function setToday(id) {
-        // May want .toLocaleDateString instead, if we can get ISO ordering required for <input type=date>
-        var today = new Date().toISOString().slice(0, 10);
+        // en-CA for 2024-01-31
+        var today = new Intl.DateTimeFormat('en-CA').format(new Date())
         var elt = document.getElementById(id);
         elt.value = today;
         // This doesn't get called when changed by JS, so we do so manually.
@@ -25,7 +25,7 @@ tr.changed {
         var day = new Date();
         day.setDate(day.getDate() - 1);
         var elt = document.getElementById(id);
-        elt.value = day.toISOString().slice(0, 10);
+        elt.value = new Intl.DateTimeFormat('en-CA').format(day);
         elt.onchange();
     }
 </script>
