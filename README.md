@@ -20,8 +20,8 @@ However, it also does a lot for people as a product:
 * Provide information about your friends: employer, partner's name, last name, etc. that can be nice to remember
 
 Hey is meant to fill these gaps, respectfully.
-Hey wants to *get* your attention without *monopolizing* it.
-You manage your relationships, and then you leave.
+Hey wants to *reward* your attention without *monopolizing* it.
+You care for your relationships, and then you leave.
 There's no content to consume.
 
 ## Why not Monica?
@@ -54,29 +54,3 @@ poe coverage           # See test coverage info
 poe run                # Start local server in foreground
 ```
 
-### Classic setup
-Create a venv
-
-```bash
-python3 -m venv venv
-. venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-...then you can run...
-
-```bash
-# Set up your database
-./manage.py migrate
-# This is on your path after installing, as long as the venv is active
-django-admin createsuperuser
-# Bundle up static assets into static/
-# For example, the Django admin UI.
-# I haven't vendored that as a dependency, since I'm not sure how I'll license yet.
-./manage.py collectstatic 
-```
-
-Now, you can:
-* start the app with `./manage.py runserver`.
-* run tests with `./manage.py test`
-* see test coverage by running `coverage run --source='.' manage.py test hey` then `coverage report -m` (...it's a work in progress :p)
